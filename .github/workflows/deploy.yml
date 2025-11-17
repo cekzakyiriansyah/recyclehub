@@ -17,18 +17,11 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
-          cd /home/ubuntu/recyclehub
-          
-          # Pull kode terbaru
+          cd /home/zaky/recyclehub
           git pull origin main
           
-          # Build dari source code terbaru
-          sudo docker build -t recyclehub .
+          # Copy file langsung (lebih cepat & reliable)
+          sudo docker cp . recyclehub:/usr/share/nginx/html/
+          sudo docker restart recyclehub
           
-          # Deploy container baru
-          sudo docker stop recyclehub || true
-          sudo docker rm recyclehub || true
-          sudo docker run -d --name recyclehub -p 80:80 recyclehub
-          
-          echo "🚀 Deployment successful!"
-          echo "🌐 Website: http://157.10.160.57"
+          echo "✅ Website updated successfully!"
