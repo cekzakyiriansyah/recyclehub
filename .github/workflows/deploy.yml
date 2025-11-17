@@ -1,5 +1,4 @@
-name: Deploy to IDCloudhost
-
+name: Deploy to VPS
 on:
   push:
     branches: [ main ]
@@ -9,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
-    
+      uses: actions/checkout@v4
+
     - name: Deploy to VPS
       uses: appleboy/ssh-action@master
       with:
@@ -18,12 +17,20 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
-          echo "🚀 Starting deployment..."
-          cd /home/zaky/recyclehub
+          # 1. Navigate to project directory (pastikan path-nya benar)
+          cd /path/to/your/recyclehub
+          
+          # 2. Pull latest changes
           git pull origin main
-          docker build -t recyclehub .
-          docker stop recyclehub || true
-          docker rm recyclehub || true
-          docker run -d --name recyclehub -p 80:80 recyclehub
+          
+          # 3. Build Docker image dengan sudo
+          sudo docker build -t recyclehub .
+          
+          # 4. Stop and remove old container
+          sudo docker stop recyclehub || true
+          sudo docker rm recyclehub || true
+          
+          # 5. Run new container
+          sudo docker run -d --name recyclehub -p 3000:3000 recyclehub
+          
           echo "✅ Deployment successful!"
-          docker ps
