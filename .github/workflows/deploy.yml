@@ -23,4 +23,6 @@ jobs:
       with:
         context: .
         push: true
-        tags: zaky21/recyclehub:latest
+        tags: |
+          zaky21/recyclehub:latest
+          zaky21/recyclehub:${{ github.run_number }}
