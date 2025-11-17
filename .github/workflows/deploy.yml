@@ -17,20 +17,17 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
-          # 1. Navigate to project directory (pastikan path-nya benar)
-          cd /path/to/your/recyclehub
+          cd /home/ubuntu/recyclehub
           
-          # 2. Pull latest changes
           git pull origin main
-          
-          # 3. Build Docker image dengan sudo
           sudo docker build -t recyclehub .
-          
-          # 4. Stop and remove old container
           sudo docker stop recyclehub || true
           sudo docker rm recyclehub || true
           
-          # 5. Run new container
-          sudo docker run -d --name recyclehub -p 3000:3000 recyclehub
+          # PAKAI PORT 3001 (beda dari Grafana di 3000)
+          sudo docker run -d --name recyclehub -p 3001:3000 recyclehub
           
-          echo "✅ Deployment successful!"
+          # Cek status
+          sudo docker ps
+          echo "✅ RecycleHub deployed on port 3001!"
+          echo "🌐 Access via: http://157.10.160.57:3001"
