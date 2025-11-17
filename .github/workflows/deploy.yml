@@ -1,3 +1,4 @@
+# deploy.yml
 name: Deploy to VPS
 on:
   push:
@@ -7,9 +8,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
     - name: Deploy to VPS
       uses: appleboy/ssh-action@master
       with:
@@ -17,17 +15,8 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
-          cd /home/ubuntu/recyclehub
-          
-          git pull origin main
-          sudo docker build -t recyclehub .
+          # Pull dan run image dari Docker Hub
           sudo docker stop recyclehub || true
           sudo docker rm recyclehub || true
-          
-          # PAKAI PORT 3001 (beda dari Grafana di 3000)
-          sudo docker run -d --name recyclehub -p 3001:3000 recyclehub
-          
-          # Cek status
-          sudo docker ps
-          echo "✅ RecycleHub deployed on port 3001!"
-          echo "🌐 Access via: http://157.10.160.57:3001"
+          sudo docker run -d --name recyclehub -p 80:80 zaky21/recyclehub:v1
+          echo "✅ Deployed from Docker Hub!"
