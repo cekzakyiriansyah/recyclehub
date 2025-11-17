@@ -23,4 +23,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: zaky21/recyclehub:v1
+        tags: zaky21/recyclehub:latest
